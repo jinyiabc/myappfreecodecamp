@@ -29,6 +29,13 @@ app.get('/', (req, res)  => {
 //     var url = require('url')
     
     function parsetime (time) {
+      console.log(isNaN(time.getTime()))
+      if (isNaN(time.getTime())) {
+              return {
+        unixtime: null, 
+        natural: null
+      }
+      }
       return {
         unixtime: time.getTime(), 
         natural: formatDate(time)
@@ -52,19 +59,6 @@ function formatDate(date) {
   return monthNames[monthIndex] + ' '+day+ ', ' + year;
 }
 
-function isDate(str) {
-  // return (Object.prototype.toString.call(new Date(str)) === "[object Date]");
-  var date = new Date(str)
-  // return !isNaN(date.getTime())
-  if (Object.prototype.toString.call(date) === "[object Date]"){
-    
-   if(!isNaN(date.getTime())){
-      return true;
-      }
-  }
-  return false;
-}
-
 // console.log(formatDate(new Date())); 
     
     app.use(function (req, res) {
@@ -74,17 +68,17 @@ function isDate(str) {
                // console.log(req.url.slice(1))
                // console.log(decodeURI(req.url.slice(1)) == req.url.slice(1))
                // console.log(typeof new Date(req.url.slice(1)))      
-             var date = req.url.slice(1)
-      if (req.url =='/'){
-        	res.sendFile(process.cwd() + '/views/index.html');
-      }  
+    var date = req.url.slice(1)
+      // if (req.url =='/'){
+      //   	res.sendFile(process.cwd() + '/views/index.html');
+      // }  
       
-      if(!isDate(decodeURI(date)) ){
-        result = {
-        unixtime: null, 
-        natural: null
-      };
-      } else {
+      // if(!isDate(decodeURI(date)) ){
+      //   result = {
+      //   unixtime: null, 
+      //   natural: null
+      // };
+      // } else {
         
              if (decodeURI(date) != date){
                  time = new Date(decodeURI(date))
@@ -95,7 +89,7 @@ function isDate(str) {
                  result = parsetime(time)   
 
               }
-             }
+             // }
       
       
     // result = parsetime(time)    //  {"hour":16,"minute":16,"second":53}
