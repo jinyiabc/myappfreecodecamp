@@ -52,6 +52,19 @@ function formatDate(date) {
   return monthNames[monthIndex] + ' '+day+ ', ' + year;
 }
 
+function isDate(str) {
+  // return (Object.prototype.toString.call(new Date(str)) === "[object Date]");
+  var date = new Date(str)
+  // return !isNaN(date.getTime())
+  if (Object.prototype.toString.call(date) === "[object Date]"){
+    
+   if(!isNaN(date.getTime())){
+      return true;
+      }
+  }
+  return false;
+}
+
 // console.log(formatDate(new Date())); 
     
     app.use(function (req, res) {
@@ -64,16 +77,28 @@ function formatDate(date) {
              var date = req.url.slice(1)
       if (req.url =='/'){
         	res.sendFile(process.cwd() + '/views/index.html');
-      }   
+      }  
       
-      if (decodeURI(date) != date){
-         time = new Date(decodeURI(date))
-      } else if(decodeURI(date) == date){
-         time = new Date(Number(date))
-      }
+      if(!isDate(decodeURI(date)) ){
+        result = {
+        unixtime: null, 
+        natural: null
+      };
+      } else {
+        
+             if (decodeURI(date) != date){
+                 time = new Date(decodeURI(date))
+                 result = parsetime(time) 
+
+               } else if(decodeURI(date) == date){
+                 time = new Date(Number(date))
+                 result = parsetime(time)   
+
+              }
+             }
       
       
-    result = parsetime(time)    //  {"hour":16,"minute":16,"second":53}
+    // result = parsetime(time)    //  {"hour":16,"minute":16,"second":53}
     // console.log(time)
 //       if (/^\/api\/parsetime/.test(req.url)) {
 //         result = parsetime(time)
